@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "643813689413",
+    "firebase_url": "https://ilhem-14801.firebaseio.com",
+    "project_id": "ilhem-14801",
+    "storage_bucket": "ilhem-14801.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643813689413:android:69ad33755aa37b004efb2c",
+        "android_client_info": {
+          "package_name": "com.example.ilhem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643813689413-9hahnp7m7lnrp1uam0l8emmvalkur16s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbgYI_Y3Np-OWAF5e5HRiOwcjvCO7v_Pk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643813689413-9hahnp7m7lnrp1uam0l8emmvalkur16s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
