@@ -10,9 +10,8 @@ class _StatistiqueState extends State<Statistique> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'statistique'
-        ),
+        backgroundColor: Colors.cyan[700],
+        title: Text('statistique'),
       ),
     );
   }
