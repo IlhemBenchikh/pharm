@@ -45,7 +45,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE $drugstab($colname TEXT primary key autoincrement, $collab TEXT, $colpre DOUBLE, $colci DOUBLE, $colcmin DOUBLE, $colcmax DOUBLE, $colvap DOUBLE, $colprix DOUBLE, $colstab TEXT)');
+        'CREATE TABLE $drugstab($colname INTEGER primary key autoincrement, $collab TEXT, $colpre INTEGER, $colci DOUBLE, $colcmin DOUBLE, $colcmax DOUBLE, $colvap DOUBLE, $colprix DOUBLE, $colstab INTEGER)');
   }
 
   //fetch operation: get all grug objects from database
@@ -91,5 +91,17 @@ class DatabaseHelper {
         await db.rawQuery('SELECT COUNT (*) from $drugstab');
     int result = Sqflite.firstIntValue(x);
     return result;
+  }
+
+  // get the map list and convert it to drugs list
+  Future<List<Drugs>> getDrugList() async {
+    var drugMapList = await getDrugMapList();
+    int count = drugMapList.length;
+
+    List<Drugs> drugList = List<Drugs>();
+    for (int i = 0; i < count; i++) {
+      drugList.add(Drugs.fromMapObject(drugMapList[i]));
+    }
+    return drugList;
   }
 }

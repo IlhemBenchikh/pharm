@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:ilhem/models/drugs.dart';
+import 'package:ilhem/utils/database_helper.dart';
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class AddMeds extends StatefulWidget {
-  String appBarTitle;
-  AddMeds(this.appBarTitle);
+  final String appBarTitle;
+  final Drugs drugs;
+  AddMeds(this.drugs, this.appBarTitle);
   @override
-  _AddMedsState createState() => _AddMedsState(appBarTitle);
+  _AddMedsState createState() => _AddMedsState(this.drugs, this.appBarTitle);
 }
 
 class _AddMedsState extends State<AddMeds> {
   String value = '';
   String prop = '';
   String appBarTitle;
+  Drugs drugs;
 
-  var _currencies = ['Flacon de 20mg/1ml', 'Flacon de 80mg/4ml'];
+  DatabaseHelper helper = DatabaseHelper();
+
+  static var _currencies = ['Flacon de 20mg/1ml', 'Flacon de 80mg/4ml'];
   var _currentItemSelected = 'Flacon de 20mg/1ml';
-  var _currencies1 = ['Flacon en verre', 'Flacon en PVC'];
+  static var _currencies1 = ['Flacon en verre', 'Flacon en PVC'];
   var _currentItemSelected1 = 'Flacon en verre';
-  var _temp = ['25°C', '4°C'];
-  var _currentItempSelected = '25°C';
+  // static var _temp = ['25°C', '4°C'];
+  // var _currentItempSelected = '25°C';
 
   TextEditingController nameController = TextEditingController();
   TextEditingController labController = TextEditingController();
@@ -28,10 +36,18 @@ class _AddMedsState extends State<AddMeds> {
   TextEditingController vapController = TextEditingController();
   TextEditingController prixController = TextEditingController();
 
-  _AddMedsState(this.appBarTitle);
+  _AddMedsState(this.drugs, this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = drugs.name;
+    labController.text = drugs.lab;
+    // ciController.text = drugs.ci;
+    // cminController.text = drugs.cmin;
+    // cmaxController.text = drugs.cmax;
+    // vapController.text = drugs.vap;
+    // prixController.value = drugs.prix;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
@@ -48,6 +64,7 @@ class _AddMedsState extends State<AddMeds> {
                 controller: nameController,
                 onChanged: (value) {
                   debugPrint('bansobczzn');
+                  updateName();
                 },
                 cursorWidth: 1,
                 cursorColor: Colors.black,
@@ -86,6 +103,10 @@ class _AddMedsState extends State<AddMeds> {
                   BoxDecoration(borderRadius: BorderRadius.circular(35)),
               margin: EdgeInsets.only(top: 15, right: 120, left: 10),
               child: TextFormField(
+                controller: labController,
+                onChanged: (value) {
+                  updateLab();
+                },
                 cursorWidth: 1,
                 cursorColor: Colors.black,
                 style: TextStyle(
@@ -172,10 +193,11 @@ class _AddMedsState extends State<AddMeds> {
                         //print(_value.toString()),
                         setState(() {
                           this._currentItemSelected = newValueSelected;
+                          updatePresentationAsInt(newValueSelected);
                           // value = _value;
                         }),
                       },
-                      value: _currentItemSelected,
+                      value: getPresentationAsString(drugs.pre),
                     ),
                     // decoration: BoxDecoration(
                     //   borderRadius: BorderRadius.circular(35)
@@ -459,32 +481,33 @@ class _AddMedsState extends State<AddMeds> {
                           onChanged: (String newValuSelected) => {
                             setState(() {
                               this._currentItemSelected1 = newValuSelected;
+                              updateStabAsInt(newValuSelected);
                             }),
                           },
-                          value: _currentItemSelected1,
+                          value: getStabAsString(drugs.stab),
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 65),
-                      child: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: DropdownButton<String>(
-                          items: _temp.map((String dropDownStringItem) {
-                            return DropdownMenuItem<String>(
-                              value: dropDownStringItem,
-                              child: Text(dropDownStringItem),
-                            );
-                          }).toList(),
-                          onChanged: (String newValuSelected) => {
-                            setState(() {
-                              this._currentItempSelected = newValuSelected;
-                            }),
-                          },
-                          value: _currentItempSelected,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   margin: EdgeInsets.only(left: 65),
+                    //   child: Padding(
+                    //     padding: EdgeInsets.all(0),
+                    //     child: DropdownButton<String>(
+                    //       items: _temp.map((String dropDownStringItem) {
+                    //         return DropdownMenuItem<String>(
+                    //           value: dropDownStringItem,
+                    //           child: Text(dropDownStringItem),
+                    //         );
+                    //       }).toList(),
+                    //       onChanged: (String newValuSelected) => {
+                    //         setState(() {
+                    //           this._currentItempSelected = newValuSelected;
+                    //         }),
+                    //       },
+                    //       value: _currentItempSelected,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ],
@@ -503,7 +526,8 @@ class _AddMedsState extends State<AddMeds> {
                 color: Colors.cyan[700],
                 onPressed: () {
                   setState(() {
-                    debugPrint('add cbus');
+                    debugPrint('add DRUG');
+                    _save();
                   });
                 },
               ),
@@ -512,5 +536,93 @@ class _AddMedsState extends State<AddMeds> {
         ),
       ),
     );
+  }
+
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
+  }
+
+  //convert to string presentation in the form of integer befor saving it to database
+  void updatePresentationAsInt(String value) {
+    switch (value) {
+      case 'Flacon de 20mg/1ml':
+        drugs.pre = 1;
+        break;
+      case 'Flacon de 80mg/4ml':
+        drugs.pre = 2;
+        break;
+    }
+  }
+
+  //convert int presentation to string presentation and display it to user in dropdownbutton
+  String getPresentationAsString(int value) {
+    String pre;
+    switch (value) {
+      case 1:
+        pre = _currencies[0];
+        break;
+      case 2:
+        pre = _currencies[1];
+        break;
+    }
+    return pre;
+  }
+
+  //convert to string stab in the form of integer befor saving it to database
+  void updateStabAsInt(String value) {
+    switch (value) {
+      case 'Flacon en verre':
+        drugs.pre = 1;
+        break;
+      case 'Flacon en PVC':
+        drugs.pre = 2;
+        break;
+    }
+  }
+
+  String getStabAsString(int value) {
+    String stab;
+    switch (value) {
+      case 1:
+        stab = _currencies1[0];
+        break;
+      case 2:
+        stab = _currencies1[1];
+        break;
+    }
+    return stab;
+  }
+
+  void updateName() {
+    drugs.name = nameController.text;
+  }
+
+  void updateLab() {
+    drugs.lab = labController.text;
+  }
+
+  void _save() async {
+    moveToLastScreen();
+
+    int result;
+    if (drugs.name != null) {
+      result = await helper.updateDrug(drugs);
+    } else {
+      result = await helper.insertDrug(drugs);
+    }
+
+    if (result != 0) {
+      _showAlterDialog('status', 'drug saved successfully');
+    } else {
+      _showAlterDialog('status', 'problem saving drug');
+    }
+  }
+
+  void _showAlterDialog(String name, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(name),
+      content: Text(message),
+    );
+    showDialog(context: context, builder: (_) => alertDialog);
   }
 }

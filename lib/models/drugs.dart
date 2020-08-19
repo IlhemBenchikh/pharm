@@ -1,26 +1,26 @@
 class Drugs {
   String _name;
   String _lab;
-  double _pre;
+  int _pre;
   double _ci;
   double _cmin;
   double _cmax;
   double _vap;
   double _prix;
-  String _stab;
+  int _stab;
 
   Drugs(this._name, this._lab, this._pre, this._ci, this._cmin, this._cmax,
       this._vap, this._prix, this._stab);
 
   String get name => _name;
   String get lab => _lab;
-  double get pre => _pre;
+  int get pre => _pre;
   double get ci => _ci;
   double get cmin => _cmin;
   double get cmax => _cmax;
   double get vap => _vap;
   double get prix => _prix;
-  String get stab => _stab;
+  int get stab => _stab;
 
   set name(String newName) {
     this._name = newName;
@@ -30,7 +30,7 @@ class Drugs {
     this._lab = newLab;
   }
 
-  set pre(double newPre) {
+  set pre(int newPre) {
     if (newPre >= 1 && newPre <= 2) {
       this._pre = newPre;
     }
@@ -56,7 +56,7 @@ class Drugs {
     this._prix = newPrix;
   }
 
-  set stab(String newStab) {
+  set stab(int newStab) {
     this._stab = newStab;
   }
 
