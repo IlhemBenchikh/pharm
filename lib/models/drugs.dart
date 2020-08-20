@@ -57,7 +57,9 @@ class Drugs {
   }
 
   set stab(int newStab) {
-    this._stab = newStab;
+    if (newStab >= 1 && newStab <= 2) {
+      this._stab = newStab;
+    }
   }
 
   Map<String, dynamic> toMap() {

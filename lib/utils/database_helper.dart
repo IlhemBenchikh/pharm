@@ -45,7 +45,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE $drugstab($colname INTEGER primary key autoincrement, $collab TEXT, $colpre INTEGER, $colci DOUBLE, $colcmin DOUBLE, $colcmax DOUBLE, $colvap DOUBLE, $colprix DOUBLE, $colstab INTEGER)');
+        'CREATE TABLE $drugstab($colname TEXT primary key, $collab TEXT, $colpre INTEGER, $colci DOUBLE, $colcmin DOUBLE, $colcmax DOUBLE, $colvap DOUBLE, $colprix DOUBLE, $colstab INTEGER)');
   }
 
   //fetch operation: get all grug objects from database

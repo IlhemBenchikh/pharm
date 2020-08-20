@@ -4,7 +4,6 @@ import 'package:ilhem/models/drugs.dart';
 import 'package:ilhem/utils/database_helper.dart';
 import 'package:intl/intl.dart';
 
-// ignore: must_be_immutable
 class AddMeds extends StatefulWidget {
   final String appBarTitle;
   final Drugs drugs;
@@ -22,8 +21,10 @@ class _AddMedsState extends State<AddMeds> {
   DatabaseHelper helper = DatabaseHelper();
 
   static var _currencies = ['Flacon de 20mg/1ml', 'Flacon de 80mg/4ml'];
+  // ignore: unused_field
   var _currentItemSelected = 'Flacon de 20mg/1ml';
   static var _currencies1 = ['Flacon en verre', 'Flacon en PVC'];
+  // ignore: unused_field
   var _currentItemSelected1 = 'Flacon en verre';
   // static var _temp = ['25°C', '4°C'];
   // var _currentItempSelected = '25°C';
@@ -478,10 +479,10 @@ class _AddMedsState extends State<AddMeds> {
                               child: Text(dropDownStringItem),
                             );
                           }).toList(),
-                          onChanged: (String newValuSelected) => {
+                          onChanged: (String newValuSelected1) => {
                             setState(() {
-                              this._currentItemSelected1 = newValuSelected;
-                              updateStabAsInt(newValuSelected);
+                              this._currentItemSelected1 = newValuSelected1;
+                              updateStabAsInt(newValuSelected1);
                             }),
                           },
                           value: getStabAsString(drugs.stab),
